@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地生会考学习平台</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<nav class="top-nav">
+  <a href="index.html" data-nav="home" class="active">🏠 首页</a>
+  <a href="errors/index.html" data-nav="errors">📝 错题本</a>
+  <a href="#" data-nav="exams" onclick="alert('模拟考试功能将在后续版本上线')">📋 考试</a>
+</nav>
+
+<div class="breadcrumb">
+  <span>首页</span>
+</div>
+
+<div class="content" id="app">
+  <!-- 学科选择 -->
+  <div class="subject-cards" id="subject-cards"></div>
+
+  <!-- 年级选择 -->
+  <div class="grade-tabs hidden" id="grade-tabs"></div>
+
+  <!-- 章节列表 -->
+  <div class="chapter-list hidden" id="chapter-list"></div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+(function() {
+  var currentSubject = null;
+  var currentGrade = null;
+
+  var subjectCardsEl = document.getElementById('subject-cards');
+  var gradeTabsEl = document.getElementById('grade-tabs');
+  var chapterListEl = document.getElementById('chapter-list');
+
+  // 渲染学科卡片
+  function renderSubjectCards() {
+    var html = '';
+    for (var key in CURRICULUM) {
+      var subj = CURRICULUM[key];
+      html += '<div class="subject-card ' + subj.color + '" onclick="window._selectSubject(\'' + key + '\')">';
+      html += '<span class="icon">' + subj.icon + '</span>';
+      html += '<span class="label">' + subj.label + '</span>';
+      html += '</div>';
+    }
+    subjectCardsEl.innerHTML = html;
+  }
+
+  // 选择学科
+  window._selectSubject = function(key) {
+    currentSubject = key;
+    var subj = CURRICULUM[key];
+    currentGrade = null;
+
+    // 高亮选中卡片
+    var cards = subjectCardsEl.querySelectorAll('.subject-card');
+    cards.forEach(function(c) { c.classList.remove('selected'); });
+    cards.forEach(function(c) {
+      if (c.textContent.indexOf(subj.label) !== -1) c.classList.add('selected');
+    });
+
+    // 渲染年级选择
+    renderGradeTabs(key);
+  };
+
+  // 渲染年级标签
+  function renderGradeTabs(key) {
+    var subj = CURRICULUM[key];
+    var grades = subj.grades;
+    var html = '';
+    for (var gKey in grades) {
+      html += '<button class="grade-tab" data-grade="' + gKey + '" onclick="window._selectGrade(\'' + key + '\', \'' + gKey + '\')">' + grades[gKey].label + '</button>';
+    }
+    gradeTabsEl.innerHTML = html;
+    gradeTabsEl.classList.remove('hidden');
+    chapterListEl.innerHTML = '';
+  }
+
+  // 选择年级
+  window._selectGrade = function(subjKey, gradeKey) {
+    currentGrade = gradeKey;
+    var subj = CURRICULUM[subjKey];
+    var grade = subj.grades[gradeKey];
+
+    // 更新面包屑
+    document.querySelector('.breadcrumb').innerHTML = '<a href="index.html">首页</a><span>›</span><span>' + subj.label + '</span><span>›</span><span>' + grade.label + '</span>';
+
+    // 高亮当前年级tab
+    var tabs = gradeTabsEl.querySelectorAll('.grade-tab');
+    tabs.forEach(function(t) { t.classList.remove('active'); });
+    tabs.forEach(function(t) {
+      if (t.dataset.grade === gradeKey) t.classList.add('active');
+    });
+
+    // 渲染章节列表
+    renderChapterList(subj, grade, subjKey, gradeKey);
+  };
+
+  // 渲染章节列表
+  function renderChapterList(subj, grade, subjKey, gradeKey) {
+    // 确定章节页面路径前缀
+    var prefix = subjKey + '/' + gradeKey + '/';
+
+    var html = '';
+    grade.chapters.forEach(function(ch, idx) {
+      html += '<a class="chapter-item" href="' + prefix + ch.id + '.html">';
+      html += '<span class="ch-num">' + (idx + 1) + '</span>';
+      html += '<div class="ch-info">';
+      html += '<div class="ch-title">' + ch.title + '</div>';
+      html += '<div class="ch-meta">' + (ch.desc || '') + '</div>';
+      html += '</div>';
+      html += '<span class="ch-arrow">›</span>';
+      html += '</a>';
+    });
+
+    chapterListEl.innerHTML = html;
+    chapterListEl.classList.remove('hidden');
+  }
+
+  // 初始化
+  renderSubjectCards();
+})();
+</script>
+
+</body>
+</html>
