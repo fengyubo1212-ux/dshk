@@ -180,7 +180,7 @@
 
 <!-- 练习入口 -->
 <div style="text-align:center;margin:32px 0 16px;">
-  <button class="btn btn-primary" onclick="startQuiz()" style="font-size:1.1rem;padding:14px 48px;">
+  <button class="btn btn-primary" id="start-quiz-btn" style="font-size:1.1rem;padding:14px 48px;">
     📝 开始练习（10题）
   </button>
 </div>
@@ -190,8 +190,8 @@
 
 </div><!-- /content -->
 
-<script src="../../assets/app.js"></script>
-<script src="../../assets/quiz.js"></script>
+<script src="../../assets/app.js?v=1"></script>
+<script src="../../assets/quiz.js?v=1"></script>
 <script>
 // ===== 练习数据 =====
 var BIO_B7S_CH03_QUIZ = [
@@ -277,19 +277,31 @@ var BIO_B7S_CH03_QUIZ = [
   }
 ];
 
-function startQuiz() {
-  var quizArea = document.getElementById('quiz-area');
-  quizArea.classList.remove('hidden');
-  quizArea.scrollIntoView({ behavior: 'smooth' });
+document.addEventListener("DOMContentLoaded", function() {
+  var btn = document.getElementById("start-quiz-btn");
+  if (!btn) return;
 
-  QuizEngine.init({
-    data: BIO_B7S_CH03_QUIZ,
-    subject: 'biology',
-    chapterId: 'b7s/ch03',
-    chapterName: '第3章 细胞是生命活动的基本单位',
-    containerId: 'quiz-area'
+  btn.addEventListener("click", function() {
+    var quizArea = document.getElementById("quiz-area");
+    if (!quizArea) return;
+
+    quizArea.classList.remove("hidden");
+    quizArea.scrollIntoView({ behavior: "smooth" });
+
+    if (typeof QuizEngine === "undefined") {
+      quizArea.innerHTML = "<p style="text-align:center;padding:32px;color:var(--color-error);">练习引擎加载失败，请刷新页面重试。</p>";
+      return;
+    }
+
+    QuizEngine.init({
+      data: BIO_B7S_CH03_QUIZ,
+      subject: "biology",
+      chapterId: "b7s/ch03",
+      chapterName: "第3章 细胞是生命活动的基本单位",
+      containerId: "quiz-area"
+    });
   });
-}
+});
 </script>
 
 </body>
