@@ -1,0 +1,400 @@
+/* === CSS变量 === */
+:root {
+  --color-geo: #2b7a78;
+  --color-geo-light: #e0f2f1;
+  --color-bio: #4a9c5d;
+  --color-bio-light: #e8f5e9;
+  --color-correct: #27ae60;
+  --color-error: #e74c3c;
+  --color-bg: #fafafa;
+  --color-card: #ffffff;
+  --color-text: #2c3e50;
+  --color-text-light: #7f8c8d;
+  --color-border: #e0e0e0;
+  --nav-height: 52px;
+  --breadcrumb-height: 36px;
+  --max-width: 720px;
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* === Reset === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+  padding-top: calc(var(--nav-height) + var(--breadcrumb-height));
+  padding-bottom: 24px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* === 顶部导航栏 === */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  height: var(--nav-height);
+}
+.top-nav a {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.top-nav a.active {
+  color: var(--color-text);
+  border-bottom-color: var(--color-geo);
+}
+.top-nav a:hover { color: var(--color-text); }
+
+/* === 面包屑 === */
+.breadcrumb {
+  position: fixed;
+  top: var(--nav-height);
+  left: 0; right: 0;
+  z-index: 99;
+  background: var(--color-bg);
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  height: var(--breadcrumb-height);
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+.breadcrumb a {
+  color: var(--color-geo);
+  text-decoration: none;
+}
+.breadcrumb span { margin: 0 4px; }
+
+/* === 内容区 === */
+.content { padding: 16px; }
+.content h1 { font-size: 1.5rem; margin-bottom: 12px; }
+.content h2 { font-size: 1.2rem; margin: 20px 0 10px; color: var(--color-geo); }
+.content p { margin-bottom: 12px; }
+
+/* === 学科选择卡片 === */
+.subject-cards {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.subject-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  border-radius: var(--radius);
+  background: var(--color-card);
+  box-shadow: var(--shadow);
+  border: 2px solid transparent;
+  text-decoration: none;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s;
+  min-height: 120px;
+}
+.subject-card:active { transform: scale(0.97); }
+.subject-card.geo { border-color: var(--color-geo-light); }
+.subject-card.geo:hover, .subject-card.geo.selected { border-color: var(--color-geo); }
+.subject-card.bio { border-color: var(--color-bio-light); }
+.subject-card.bio:hover, .subject-card.bio.selected { border-color: var(--color-bio); }
+.subject-card .icon { font-size: 2.2rem; margin-bottom: 8px; }
+.subject-card .label { font-size: 1.1rem; font-weight: 600; }
+
+/* === 年级选择按钮 === */
+.grade-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+.grade-tab {
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.grade-tab.active {
+  background: var(--color-geo);
+  color: #fff;
+  border-color: var(--color-geo);
+}
+
+/* === 章节列表 === */
+.chapter-list { list-style: none; }
+.chapter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  border-radius: var(--radius);
+  background: var(--color-card);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: transform 0.15s;
+  min-height: 48px;
+}
+.chapter-item:active { transform: scale(0.98); }
+.chapter-item .ch-num {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--color-geo-light);
+  color: var(--color-geo);
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.chapter-item .ch-info { flex: 1; }
+.chapter-item .ch-title { font-weight: 500; }
+.chapter-item .ch-meta { font-size: 0.8rem; color: var(--color-text-light); }
+.chapter-item .ch-arrow { color: var(--color-text-light); font-size: 1.2rem; }
+
+/* === 按钮 === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn:active { opacity: 0.8; }
+.btn-primary { background: var(--color-geo); color: #fff; }
+.btn-outline { background: var(--color-card); color: var(--color-geo); border: 1.5px solid var(--color-geo); }
+.btn-sm { min-height: 36px; padding: 6px 14px; font-size: 0.85rem; }
+.btn-danger { background: var(--color-error); color: #fff; }
+
+/* === 练习题 === */
+.quiz-container { margin-top: 20px; }
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  margin: 0 12px;
+  overflow: hidden;
+}
+.progress-bar .fill {
+  height: 100%;
+  background: var(--color-geo);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.quiz-question {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.quiz-question .q-num {
+  font-size: 0.85rem;
+  color: var(--color-geo);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.quiz-question .q-text {
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.quiz-options { list-style: none; }
+.quiz-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-card);
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 44px;
+}
+.quiz-option:active { transform: scale(0.98); }
+.quiz-option:hover { border-color: var(--color-geo); background: var(--color-geo-light); }
+.quiz-option.selected { border-color: var(--color-geo); background: var(--color-geo-light); }
+.quiz-option.correct { border-color: var(--color-correct); background: #e8f5e9; }
+.quiz-option.wrong { border-color: var(--color-error); background: #fdecea; }
+.quiz-option.show-correct { border-color: var(--color-correct); background: #e8f5e9; }
+.quiz-option .opt-label {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--color-bg);
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.quiz-feedback {
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct { background: #e8f5e9; color: var(--color-correct); }
+.quiz-feedback.wrong { background: #fdecea; color: var(--color-error); }
+
+.quiz-results {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  padding: 32px 20px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.quiz-results .score {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-geo);
+}
+.quiz-results .score-label { color: var(--color-text-light); margin: 8px 0 20px; }
+
+/* === 错题本 === */
+.error-list { list-style: none; }
+.error-item {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--color-error);
+}
+.error-item .err-date {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+}
+.error-item .err-chapter {
+  font-size: 0.8rem;
+  color: var(--color-geo);
+  margin-bottom: 8px;
+}
+.error-item .err-question { font-weight: 500; margin-bottom: 10px; }
+.error-item .err-original {
+  font-size: 0.85rem;
+  color: var(--color-error);
+  margin-bottom: 4px;
+}
+.error-item .err-correct-answer {
+  font-size: 0.85rem;
+  color: var(--color-correct);
+  margin-bottom: 10px;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.filter-bar select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  background: var(--color-card);
+  min-height: 44px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--color-text-light);
+}
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+
+/* === 考试页 === */
+.exam-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--color-card);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.exam-timer {
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-error);
+}
+.exam-timer.warning { animation: pulse 1s infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* === 隐藏类 === */
+.hidden { display: none !important; }
+
+/* === 打印样式 === */
+@media print {
+  .top-nav, .breadcrumb, .btn, .quiz-feedback, .filter-bar,
+  .quiz-progress, .exam-header, .exam-timer { display: none !important; }
+  body {
+    padding-top: 0;
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+    max-width: none;
+  }
+  .quiz-option.correct, .quiz-option.show-correct { background: #fff; border-color: #999; }
+  .quiz-option.wrong { background: #fff; border-color: #999; }
+  .content h2 { color: #000; }
+  .chapter-item, .quiz-question, .error-item, .quiz-results {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+}
