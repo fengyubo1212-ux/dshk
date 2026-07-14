@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>错题本 - 地生会考学习平台</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" data-nav="home">🏠 首页</a>
+  <a href="index.html" data-nav="errors" class="active">📝 错题本</a>
+  <a href="#" data-nav="exams" onclick="alert('模拟考试功能将在后续版本上线')">📋 考试</a>
+</nav>
+
+<div class="breadcrumb">
+  <a href="../index.html">首页</a><span>›</span><span>错题本</span>
+</div>
+
+<div class="content" id="app">
+  <h1>📝 错题本</h1>
+
+  <div class="filter-bar" id="filter-bar">
+    <select id="filter-subject" onchange="renderErrors()">
+      <option value="">全部学科</option>
+      <option value="geography">地理</option>
+      <option value="biology">生物</option>
+    </select>
+    <select id="filter-chapter" onchange="renderErrors()">
+      <option value="">全部章节</option>
+    </select>
+    <button class="btn btn-danger btn-sm" onclick="clearErrors()" style="margin-left:auto;">清空全部</button>
+  </div>
+
+  <div id="error-list"></div>
+  <div class="empty-state hidden" id="empty-state">
+    <div class="empty-icon">🎉</div>
+    <p>暂无错题，继续保持！</p>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+(function() {
+  var currentReanswer = null; // 当前正在重做的错题
+
+  function getAllChapters() {
+    var chapters = [];
+    for (var subjKey in CURRICULUM) {
+      var subj = CURRICULUM[subjKey];
+      for (var gradeKey in subj.grades) {
+        var grade = subj.grades[gradeKey];
+        grade.chapters.forEach(function(ch) {
+          chapters.push({
+            key: subjKey + '/' + gradeKey + '/' + ch.id,
+            label: subj.label + ' - ' + grade.label + ' - ' + ch.title
+          });
+        });
+      }
+    }
+    return chapters;
+  }
+
+  // 初始化章节筛选
+  function initChapterFilter() {
+    var sel = document.getElementById('filter-chapter');
+    var chapters = getAllChapters();
+    chapters.forEach(function(ch) {
+      var opt = document.createElement('option');
+      opt.value = ch.key;
+      opt.textContent = ch.label;
+      sel.appendChild(opt);
+    });
+  }
+
+  // 从题目ID推断章节ID (格式: "geo-g7s-ch01-q01")
+  function idToChapterId(id) {
+    var parts = id.split('-');
+    if (parts.length >= 3) {
+      var subj = parts[0] === 'geo' ? 'geography' : 'biology';
+      return subj + '/' + parts[1] + '/' + parts[2];
+    }
+    return null;
+  }
+
+  // 渲染错题列表
+  window.renderErrors = function() {
+    var subject = document.getElementById('filter-subject').value;
+    var chapter = document.getElementById('filter-chapter').value;
+    var listEl = document.getElementById('error-list');
+    var emptyEl = document.getElementById('empty-state');
+
+    // 获取错题
+    var errors = getErrors();
+
+    // 筛选
+    if (subject) {
+      errors = errors.filter(function(e) { return e.subject === subject; });
+    }
+    if (chapter) {
+      errors = errors.filter(function(e) {
+        return idToChapterId(e.id) === chapter;
+      });
+    }
+
+    if (errors.length === 0) {
+      listEl.innerHTML = '';
+      emptyEl.classList.remove('hidden');
+      return;
+    }
+
+    emptyEl.classList.add('hidden');
+
+    var labels = ['A', 'B', 'C', 'D'];
+    var html = '<p style="color:var(--color-text-light);margin-bottom:12px;">共 ' + errors.length + ' 道错题</p>';
+
+    errors.forEach(function(err, idx) {
+      html += '<div class="error-item" id="error-' + idx + '">';
+      html += '<div class="err-date">📅 ' + err.date + '</div>';
+      html += '<div class="err-chapter">📖 ' + (err.chapterName || '未知章节') + '</div>';
+      html += '<div class="err-question">' + err.question + '</div>';
+
+      // 显示选项
+      err.options.forEach(function(opt, optIdx) {
+        var cls = '';
+        if (optIdx === err.correctAnswer) cls = 'color:var(--color-correct);font-weight:500;';
+        if (optIdx === err.userAnswer && optIdx !== err.correctAnswer) cls = 'color:var(--color-error);text-decoration:line-through;';
+        html += '<div style="font-size:0.85rem;margin-bottom:2px;' + cls + '">' + labels[optIdx] + '. ' + opt + '</div>';
+      });
+
+      html += '<div class="err-original">你的答案：' + labels[err.userAnswer] + '</div>';
+      html += '<div class="err-correct-answer">正确答案：' + labels[err.correctAnswer] + '</div>';
+      if (err.explanation) {
+        html += '<div style="font-size:0.85rem;color:var(--color-text-light);margin-bottom:8px;">💡 ' + err.explanation + '</div>';
+      }
+
+      html += '<div style="display:flex;gap:8px;">';
+      html += '<button class="btn btn-outline btn-sm" onclick="window._reanswer(' + idx + ')">重新作答</button>';
+      html += '<button class="btn btn-sm" style="background:var(--color-correct);color:#fff;" onclick="window._markCorrect(\'' + err.id + '\')">已掌握，移除</button>';
+      html += '</div>';
+
+      // 重做区域
+      html += '<div class="hidden" id="reanswer-' + idx + '" style="margin-top:12px;"></div>';
+
+      html += '</div>';
+    });
+
+    listEl.innerHTML = html;
+  };
+
+  // 重新作答
+  window._reanswer = function(idx) {
+    var errors = getErrors();
+    var err = errors[idx];
+    if (!err) return;
+
+    var reanswerEl = document.getElementById('reanswer-' + idx);
+    var labels = ['A', 'B', 'C', 'D'];
+
+    var html = '<p style="font-weight:500;margin-bottom:8px;">' + err.question + '</p>';
+    err.options.forEach(function(opt, optIdx) {
+      html += '<div class="quiz-option" onclick="window._checkReanswer(' + idx + ', ' + optIdx + ')" style="margin-bottom:4px;">';
+      html += '<span class="opt-label">' + labels[optIdx] + '</span>';
+      html += '<span>' + opt + '</span>';
+      html += '</div>';
+    });
+    html += '<div id="reanswer-fb-' + idx + '" class="quiz-feedback"></div>';
+
+    reanswerEl.innerHTML = html;
+    reanswerEl.classList.remove('hidden');
+  };
+
+  // 检查重做答案
+  window._checkReanswer = function(idx, optIdx) {
+    var errors = getErrors();
+    var err = errors[idx];
+    if (!err) return;
+
+    var fb = document.getElementById('reanswer-fb-' + idx);
+    var isCorrect = (optIdx === err.correctAnswer);
+
+    // 禁用所有选项
+    var options = document.querySelectorAll('#reanswer-' + idx + ' .quiz-option');
+    options.forEach(function(opt, i) {
+      opt.style.pointerEvents = 'none';
+      if (i === err.correctAnswer) opt.classList.add('show-correct');
+      if (i === optIdx && !isCorrect) opt.classList.add('wrong');
+      if (i === optIdx && isCorrect) opt.classList.add('correct');
+    });
+
+    if (isCorrect) {
+      fb.className = 'quiz-feedback show correct';
+      fb.innerHTML = '✓ 回答正确！已从错题本移除。';
+      removeError(err.id);
+      // 2秒后刷新列表
+      setTimeout(function() { renderErrors(); }, 1500);
+    } else {
+      fb.className = 'quiz-feedback show wrong';
+      fb.innerHTML = '✗ 还是不对，正确答案是 ' + (['A','B','C','D'][err.correctAnswer]) + '。请继续加油！';
+    }
+  };
+
+  // 标记已掌握
+  window._markCorrect = function(id) {
+    if (confirm('确认已掌握这道题？将从错题本中移除。')) {
+      removeError(id);
+      renderErrors();
+    }
+  };
+
+  // 清空全部
+  window.clearErrors = function() {
+    if (confirm('确定要清空所有错题吗？此操作不可恢复。')) {
+      clearAllErrors();
+      renderErrors();
+    }
+  };
+
+  // 初始化
+  initChapterFilter();
+  renderErrors();
+})();
+</script>
+
+</body>
+</html>
