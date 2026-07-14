@@ -16,7 +16,7 @@
 
 <div class="breadcrumb">
   <a href="../../index.html#biology/b7s" class="back-btn" title="返回章节列表">←</a>
-  <a href="../../index.html">首页</a><span>›</span><span>生物</span><span>›</span><span>七年级上册</span><span>›</span><span>了解生物圈</span>
+  <a href="../../index.html">首页</a><span>›</span><span>生物</span><span>›</span><span>七年级上册</span><span>›</span><span>第2章 了解生物圈</span>
 </div>
 
 <div class="content">
@@ -208,7 +208,7 @@
 
 <!-- 练习入口 -->
 <div style="text-align:center;margin:32px 0 16px;">
-  <button class="btn btn-primary" id="start-quiz-btn" style="font-size:1.1rem;padding:14px 48px;">
+  <button class="btn btn-primary" onclick="startQuiz()" style="font-size:1.1rem;padding:14px 48px;">
     📝 开始练习（10题）
   </button>
 </div>
@@ -218,8 +218,8 @@
 
 </div><!-- /content -->
 
-<script src="../../assets/app.js?v=1"></script>
-<script src="../../assets/quiz.js?v=1"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/quiz.js"></script>
 <script>
 // ===== 练习数据 =====
 var BIO_B7S_CH02_QUIZ = [
@@ -270,7 +270,7 @@ var BIO_B7S_CH02_QUIZ = [
   },
   {
     id: "bio-b7s-ch02-q06",
-    question: "在"草→虫→蛙→蛇"这条食物链中，蛙属于？",
+    question: "在“草→虫→蛙→蛇”这条食物链中，蛙属于？",
     options: ["生产者", "初级消费者", "次级消费者", "分解者"],
     answer: 2,
     explanation: "生产者（草）是第一营养级，初级消费者（虫）是第二营养级，次级消费者（蛙）是第三营养级。蛇是三级消费者。"
@@ -289,10 +289,10 @@ var BIO_B7S_CH02_QUIZ = [
   },
   {
     id: "bio-b7s-ch02-q08",
-    question: "被称为"地球之肾"的生态系统是？",
+    question: "被称为“地球之肾”的生态系统是？",
     options: ["森林生态系统", "海洋生态系统", "湿地生态系统", "草原生态系统"],
     answer: 2,
-    explanation: "湿地生态系统具有净化水质、蓄洪抗旱的功能，被称为"地球之肾"。森林被称为"绿色水库""地球之肺"。"
+    explanation: "湿地生态系统具有净化水质、蓄洪抗旱的功能，被称为“地球之肾”。森林被称为“绿色水库”“地球之肺”。"
   },
   {
     id: "bio-b7s-ch02-q09",
@@ -310,31 +310,19 @@ var BIO_B7S_CH02_QUIZ = [
   }
 ];
 
-document.addEventListener("DOMContentLoaded", function() {
-  var btn = document.getElementById("start-quiz-btn");
-  if (!btn) return;
+function startQuiz() {
+  var quizArea = document.getElementById('quiz-area');
+  quizArea.classList.remove('hidden');
+  quizArea.scrollIntoView({ behavior: 'smooth' });
 
-  btn.addEventListener("click", function() {
-    var quizArea = document.getElementById("quiz-area");
-    if (!quizArea) return;
-
-    quizArea.classList.remove("hidden");
-    quizArea.scrollIntoView({ behavior: "smooth" });
-
-    if (typeof QuizEngine === "undefined") {
-      quizArea.innerHTML = "<p style="text-align:center;padding:32px;color:var(--color-error);">练习引擎加载失败，请刷新页面重试。</p>";
-      return;
-    }
-
-    QuizEngine.init({
-      data: BIO_B7S_CH02_QUIZ,
-      subject: "biology",
-      chapterId: "b7s/ch02",
-      chapterName: "第2章 了解生物圈",
-      containerId: "quiz-area"
-    });
+  QuizEngine.init({
+    data: BIO_B7S_CH02_QUIZ,
+    subject: 'biology',
+    chapterId: 'b7s/ch02',
+    chapterName: '第2章 了解生物圈',
+    containerId: 'quiz-area'
   });
-});
+}
 </script>
 
 </body>

@@ -16,7 +16,7 @@
 
 <div class="breadcrumb">
   <a href="../../index.html#biology/b7s" class="back-btn" title="返回章节列表">←</a>
-  <a href="../../index.html">首页</a><span>›</span><span>生物</span><span>›</span><span>七年级上册</span><span>›</span><span>细胞怎样构成生物体</span>
+  <a href="../../index.html">首页</a><span>›</span><span>生物</span><span>›</span><span>七年级上册</span><span>›</span><span>第4章 细胞怎样构成生物体</span>
 </div>
 
 <div class="content">
@@ -162,7 +162,7 @@
 
 <!-- 练习入口 -->
 <div style="text-align:center;margin:32px 0 16px;">
-  <button class="btn btn-primary" id="start-quiz-btn" style="font-size:1.1rem;padding:14px 48px;">
+  <button class="btn btn-primary" onclick="startQuiz()" style="font-size:1.1rem;padding:14px 48px;">
     📝 开始练习（10题）
   </button>
 </div>
@@ -172,8 +172,8 @@
 
 </div><!-- /content -->
 
-<script src="../../assets/app.js?v=1"></script>
-<script src="../../assets/quiz.js?v=1"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/quiz.js"></script>
 <script>
 // ===== 练习数据 =====
 var BIO_B7S_CH04_QUIZ = [
@@ -201,7 +201,7 @@ var BIO_B7S_CH04_QUIZ = [
       "组织→细胞→器官→系统→动物体"
     ],
     answer: 0,
-    explanation: "动物体的结构层次：细胞→组织→器官→系统→动物体。植物体没有"系统"这一层次：细胞→组织→器官→植物体。"
+    explanation: "动物体的结构层次：细胞→组织→器官→系统→动物体。植物体没有“系统”这一层次：细胞→组织→器官→植物体。"
   },
   {
     id: "bio-b7s-ch04-q04",
@@ -215,7 +215,7 @@ var BIO_B7S_CH04_QUIZ = [
     question: "植物体没有的结构层次是？",
     options: ["细胞", "组织", "器官", "系统"],
     answer: 3,
-    explanation: "植物体的结构层次为：细胞→组织→器官→植物体。植物没有"系统"这个层次，这是动植物体的重要区别之一。"
+    explanation: "植物体的结构层次为：细胞→组织→器官→植物体。植物没有“系统”这个层次，这是动植物体的重要区别之一。"
   },
   {
     id: "bio-b7s-ch04-q06",
@@ -259,31 +259,19 @@ var BIO_B7S_CH04_QUIZ = [
   }
 ];
 
-document.addEventListener("DOMContentLoaded", function() {
-  var btn = document.getElementById("start-quiz-btn");
-  if (!btn) return;
+function startQuiz() {
+  var quizArea = document.getElementById('quiz-area');
+  quizArea.classList.remove('hidden');
+  quizArea.scrollIntoView({ behavior: 'smooth' });
 
-  btn.addEventListener("click", function() {
-    var quizArea = document.getElementById("quiz-area");
-    if (!quizArea) return;
-
-    quizArea.classList.remove("hidden");
-    quizArea.scrollIntoView({ behavior: "smooth" });
-
-    if (typeof QuizEngine === "undefined") {
-      quizArea.innerHTML = "<p style="text-align:center;padding:32px;color:var(--color-error);">练习引擎加载失败，请刷新页面重试。</p>";
-      return;
-    }
-
-    QuizEngine.init({
-      data: BIO_B7S_CH04_QUIZ,
-      subject: "biology",
-      chapterId: "b7s/ch04",
-      chapterName: "第4章 细胞怎样构成生物体",
-      containerId: "quiz-area"
-    });
+  QuizEngine.init({
+    data: BIO_B7S_CH04_QUIZ,
+    subject: 'biology',
+    chapterId: 'b7s/ch04',
+    chapterName: '第4章 细胞怎样构成生物体',
+    containerId: 'quiz-area'
   });
-});
+}
 </script>
 
 </body>

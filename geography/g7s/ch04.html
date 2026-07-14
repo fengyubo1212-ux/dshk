@@ -16,7 +16,7 @@
 
 <div class="breadcrumb">
   <a href="../../index.html#geography/g7s" class="back-btn" title="返回章节列表">←</a>
-  <a href="../../index.html">首页</a><span>›</span><span>地理</span><span>›</span><span>七年级上册</span><span>›</span><span>居民与聚落·发展与合作</span>
+  <a href="../../index.html">首页</a><span>›</span><span>地理</span><span>›</span><span>七年级上册</span><span>›</span><span>第4章 居民与聚落·发展与合作</span>
 </div>
 
 <div class="content">
@@ -184,7 +184,7 @@
 
 <!-- 练习入口 -->
 <div style="text-align:center;margin:32px 0 16px;">
-  <button class="btn btn-primary" id="start-quiz-btn" style="font-size:1.1rem;padding:14px 48px;">
+  <button class="btn btn-primary" onclick="startQuiz()" style="font-size:1.1rem;padding:14px 48px;">
     📝 开始练习（10题）
   </button>
 </div>
@@ -194,8 +194,8 @@
 
 </div><!-- /content -->
 
-<script src="../../assets/app.js?v=1"></script>
-<script src="../../assets/quiz.js?v=1"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/quiz.js"></script>
 <script>
 // ===== 练习数据 =====
 var GEO_G7S_CH04_QUIZ = [
@@ -260,7 +260,7 @@ var GEO_G7S_CH04_QUIZ = [
     question: "\"南南合作\"指的是？",
     options: ["南半球国家之间的合作", "发展中国家之间的互助合作", "南极条约签署国之间的合作", "南美洲国家之间的合作"],
     answer: 1,
-    explanation: "南南合作是指发展中国家之间的互助合作（"南"指发展中国家）。发达国家与发展中国家的协商称为"南北对话"。"
+    explanation: "南南合作是指发展中国家之间的互助合作（“南”指发展中国家）。发达国家与发展中国家的协商称为“南北对话”。"
   },
   {
     id: "geo-g7s-ch04-q10",
@@ -271,31 +271,19 @@ var GEO_G7S_CH04_QUIZ = [
   }
 ];
 
-document.addEventListener('DOMContentLoaded', function() {
-  var btn = document.getElementById('start-quiz-btn');
-  if (!btn) return;
+function startQuiz() {
+  var quizArea = document.getElementById('quiz-area');
+  quizArea.classList.remove('hidden');
+  quizArea.scrollIntoView({ behavior: 'smooth' });
 
-  btn.addEventListener('click', function() {
-    var quizArea = document.getElementById('quiz-area');
-    if (!quizArea) return;
-
-    quizArea.classList.remove('hidden');
-    quizArea.scrollIntoView({ behavior: 'smooth' });
-
-    if (typeof QuizEngine === 'undefined') {
-      quizArea.innerHTML = '<p style="text-align:center;padding:32px;color:var(--color-error);">练习引擎加载失败，请刷新页面重试。</p>';
-      return;
-    }
-
-    QuizEngine.init({
-      data: GEO_G7S_CH04_QUIZ,
-      subject: 'geography',
-      chapterId: 'g7s/ch04',
-      chapterName: '第4章 居民与聚落·发展与合作',
-      containerId: 'quiz-area'
-    });
+  QuizEngine.init({
+    data: GEO_G7S_CH04_QUIZ,
+    subject: 'geography',
+    chapterId: 'g7s/ch04',
+    chapterName: '第4章 居民与聚落·发展与合作',
+    containerId: 'quiz-area'
   });
-});
+}
 </script>
 
 </body>

@@ -16,7 +16,7 @@
 
 <div class="breadcrumb">
   <a href="../../index.html#biology/b7s" class="back-btn" title="返回章节列表">←</a>
-  <a href="../../index.html">首页</a><span>›</span><span>生物</span><span>›</span><span>七年级上册</span><span>›</span><span>绿色植物与生物圈</span>
+  <a href="../../index.html">首页</a><span>›</span><span>生物</span><span>›</span><span>七年级上册</span><span>›</span><span>第7章 绿色植物与生物圈</span>
 </div>
 
 <div class="content">
@@ -174,7 +174,7 @@
 
 <!-- 练习入口 -->
 <div style="text-align:center;margin:32px 0 16px;">
-  <button class="btn btn-primary" id="start-quiz-btn" style="font-size:1.1rem;padding:14px 48px;">
+  <button class="btn btn-primary" onclick="startQuiz()" style="font-size:1.1rem;padding:14px 48px;">
     📝 开始练习（10题）
   </button>
 </div>
@@ -184,11 +184,11 @@
 
 </div><!-- /content -->
 
-<script src="../../assets/app.js?v=1"></script>
-<script src="../../assets/quiz.js?v=1"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/quiz.js"></script>
 <script>
 // ===== 练习数据 =====
-var QUIZ_DATA = [
+var BIO_B7S_CH07_QUIZ = [
   {
     id: "bio-b7s-ch07-q01",
     question: "光合作用的原料是？",
@@ -208,7 +208,7 @@ var QUIZ_DATA = [
     question: "呼吸作用的场所是？",
     options: ["叶绿体", "线粒体", "细胞核", "液泡"],
     answer: 1,
-    explanation: "呼吸作用的场所是线粒体，被称为细胞的"动力工厂"。叶绿体是光合作用的场所。"
+    explanation: "呼吸作用的场所是线粒体，被称为细胞的“动力工厂”。叶绿体是光合作用的场所。"
   },
   {
     id: "bio-b7s-ch07-q04",
@@ -261,31 +261,19 @@ var QUIZ_DATA = [
   }
 ];
 
-document.addEventListener("DOMContentLoaded", function() {
-  var btn = document.getElementById("start-quiz-btn");
-  if (!btn) return;
+function startQuiz() {
+  var quizArea = document.getElementById('quiz-area');
+  quizArea.classList.remove('hidden');
+  quizArea.scrollIntoView({ behavior: 'smooth' });
 
-  btn.addEventListener("click", function() {
-    var quizArea = document.getElementById("quiz-area");
-    if (!quizArea) return;
-
-    quizArea.classList.remove("hidden");
-    quizArea.scrollIntoView({ behavior: "smooth" });
-
-    if (typeof QuizEngine === "undefined") {
-      quizArea.innerHTML = "<p style="text-align:center;padding:32px;color:var(--color-error);">练习引擎加载失败，请刷新页面重试。</p>";
-      return;
-    }
-
-    QuizEngine.init({
-      data: QUIZ_DATA,
-      subject: "biology",
-      chapterId: "b7s/ch07",
-      chapterName: "第7章 绿色植物与生物圈",
-      containerId: "quiz-area"
-    });
+  QuizEngine.init({
+    data: BIO_B7S_CH07_QUIZ,
+    subject: 'biology',
+    chapterId: 'b7s/ch07',
+    chapterName: '第7章 绿色植物与生物圈',
+    containerId: 'quiz-area'
   });
-});
+}
 </script>
 
 </body>

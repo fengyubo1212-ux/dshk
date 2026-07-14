@@ -16,7 +16,7 @@
 
 <div class="breadcrumb">
   <a href="../../index.html#biology/b7s" class="back-btn" title="返回章节列表">←</a>
-  <a href="../../index.html">首页</a><span>›</span><span>生物</span><span>›</span><span>七年级上册</span><span>›</span><span>被子植物的一生</span>
+  <a href="../../index.html">首页</a><span>›</span><span>生物</span><span>›</span><span>七年级上册</span><span>›</span><span>第6章 被子植物的一生</span>
 </div>
 
 <div class="content">
@@ -180,7 +180,7 @@
 
 <!-- 练习入口 -->
 <div style="text-align:center;margin:32px 0 16px;">
-  <button class="btn btn-primary" id="start-quiz-btn" style="font-size:1.1rem;padding:14px 48px;">
+  <button class="btn btn-primary" onclick="startQuiz()" style="font-size:1.1rem;padding:14px 48px;">
     📝 开始练习（10题）
   </button>
 </div>
@@ -190,11 +190,11 @@
 
 </div><!-- /content -->
 
-<script src="../../assets/app.js?v=1"></script>
-<script src="../../assets/quiz.js?v=1"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/quiz.js"></script>
 <script>
 // ===== 练习数据 =====
-var QUIZ_DATA = [
+var BIO_B7S_CH06_QUIZ = [
   {
     id: "bio-b7s-ch06-q01",
     question: "根生长最快的部位是？",
@@ -267,31 +267,19 @@ var QUIZ_DATA = [
   }
 ];
 
-document.addEventListener("DOMContentLoaded", function() {
-  var btn = document.getElementById("start-quiz-btn");
-  if (!btn) return;
+function startQuiz() {
+  var quizArea = document.getElementById('quiz-area');
+  quizArea.classList.remove('hidden');
+  quizArea.scrollIntoView({ behavior: 'smooth' });
 
-  btn.addEventListener("click", function() {
-    var quizArea = document.getElementById("quiz-area");
-    if (!quizArea) return;
-
-    quizArea.classList.remove("hidden");
-    quizArea.scrollIntoView({ behavior: "smooth" });
-
-    if (typeof QuizEngine === "undefined") {
-      quizArea.innerHTML = "<p style="text-align:center;padding:32px;color:var(--color-error);">练习引擎加载失败，请刷新页面重试。</p>";
-      return;
-    }
-
-    QuizEngine.init({
-      data: QUIZ_DATA,
-      subject: "biology",
-      chapterId: "b7s/ch06",
-      chapterName: "第6章 被子植物的一生",
-      containerId: "quiz-area"
-    });
+  QuizEngine.init({
+    data: BIO_B7S_CH06_QUIZ,
+    subject: 'biology',
+    chapterId: 'b7s/ch06',
+    chapterName: '第6章 被子植物的一生',
+    containerId: 'quiz-area'
   });
-});
+}
 </script>
 
 </body>
