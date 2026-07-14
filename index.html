@@ -89,6 +89,9 @@
     var subj = CURRICULUM[subjKey];
     var grade = subj.grades[gradeKey];
 
+    // 记住状态到 hash，返回时可以精确定位
+    location.hash = subjKey + '/' + gradeKey;
+
     // 更新面包屑
     document.querySelector('.breadcrumb').innerHTML = '<a href="index.html">首页</a><span>›</span><span>' + subj.label + '</span><span>›</span><span>' + grade.label + '</span>';
 
@@ -126,6 +129,15 @@
 
   // 初始化
   renderSubjectCards();
+
+  // 如果 URL 带有 hash（如 #geography/g7s），自动恢复到对应章节列表
+  if (location.hash) {
+    var parts = location.hash.replace('#', '').split('/');
+    if (parts.length === 2 && CURRICULUM[parts[0]] && CURRICULUM[parts[0]].grades[parts[1]]) {
+      window._selectSubject(parts[0]);
+      window._selectGrade(parts[0], parts[1]);
+    }
+  }
 })();
 </script>
 
