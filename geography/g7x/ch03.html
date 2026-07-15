@@ -100,12 +100,9 @@
 
 
 <!-- 打印和保存 -->
-<div style="text-align:center;margin:24px 0 12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+<div style="text-align:center;margin:24px 0 12px;">
   <button class="btn btn-outline" onclick="window.print()" style="font-size:0.95rem;">
-    🖨️ 打印知识点
-  </button>
-  <button class="btn btn-outline" onclick="saveDoc()" style="font-size:0.95rem;">
-    💾 保存知识点
+    🖨️ 打印/保存知识点
   </button>
 </div>
 <!-- 练习入口 -->
@@ -210,25 +207,6 @@ function startQuiz() {
 }
 
 
-function saveDoc() {
-  var content = document.querySelector(".content").cloneNode(true);
-  var remove = content.querySelectorAll("#quiz-area, button, .btn");
-  remove.forEach(function(el) { el.remove(); });
-  var h = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>知识点.html</title><style>body{font-family:Microsoft YaHei,sans-serif;font-size:14pt;line-height:1.8;color:#000;padding:16px;}h1{font-size:18pt;text-align:center;margin:0 0 12px;}h2{font-size:15pt;margin:12px 0 6px;}h3{font-size:13pt;margin:8px 0 4px;}p{margin:0 0 6px;}table{border-collapse:collapse;width:100%;margin:6px 0;font-size:11pt;}td,th{border:1px solid #000;padding:3px 5px;}ul{margin:4px 0;padding-left:20px;}ul li{margin-bottom:4px;font-size:12pt;}</style></head><body>' + content.innerHTML + '</body></html>';
-  var blob = new Blob(["\ufeff" + h], {type: "text/html;charset=UTF-8"});
-  var url = URL.createObjectURL(blob);
-  var w = window.open(url, "_blank");
-  if (!w) {
-    var a = document.createElement("a");
-    a.href = url;
-    a.download = "知识点.html";
-    a.target = "_blank";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-  setTimeout(function() { URL.revokeObjectURL(url); }, 120000);
-}
 </script>
 
 </body>
