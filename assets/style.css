@@ -277,7 +277,6 @@ body {
 }
 .quiz-option:active { transform: scale(0.98); }
 .quiz-option:hover { border-color: var(--color-geo); background: var(--color-geo-light); }
-.quiz-option.selected { border-color: var(--color-geo); background: var(--color-geo-light); }
 .quiz-option.correct { border-color: var(--color-correct); background: #e8f5e9; }
 .quiz-option.wrong { border-color: var(--color-error); background: #fdecea; }
 .quiz-option.show-correct { border-color: var(--color-correct); background: #e8f5e9; }

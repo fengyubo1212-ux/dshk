@@ -133,16 +133,6 @@ function clearAllErrors() {
   saveErrors([]);
 }
 
-function getErrorsBySubject(subject) {
-  if (!subject) return getErrors();
-  return getErrors().filter(function(e) { return e.subject === subject; });
-}
-
-function getErrorsByChapter(chapterId) {
-  if (!chapterId) return getErrors();
-  return getErrors().filter(function(e) { return e.chapterId === chapterId; });
-}
-
 // ========== 导航辅助 ==========
 function getActiveNav() {
   var path = location.pathname;
@@ -157,12 +147,6 @@ function highlightNav() {
   links.forEach(function(link) {
     link.classList.toggle('active', link.dataset.nav === active);
   });
-}
-
-// ========== 工具函数 ==========
-function getQueryParam(name) {
-  var url = new URL(location.href);
-  return url.searchParams.get(name);
 }
 
 // ========== 页面初始化 ==========

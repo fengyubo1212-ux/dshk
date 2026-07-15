@@ -123,10 +123,6 @@ var QuizEngine = {
     }
   },
 
-  hasAnswered: function() {
-    return this.answers[this.currentIndex] !== undefined;
-  },
-
   nextQuestion: function() {
     if (this.currentIndex < this.quizData.length - 1) {
       this.currentIndex++;
