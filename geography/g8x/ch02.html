@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北方地区 - 地理八下 - 地生会考学习平台</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../../index.html" data-nav="home">🏠 首页</a>
+  <a href="../../errors/index.html" data-nav="errors">📝 错题本</a>
+  <a href="#" data-nav="exams" onclick="alert('模拟考试功能将在后续版本上线')">📋 考试</a>
+</nav>
+
+<div class="breadcrumb">
+  <a href="../../index.html#geography/g8x" class="back-btn" title="返回章节列表">←</a>
+  <a href="../../index.html">首页</a><span>›</span><span>地理</span><span>›</span><span>八年级下册</span><span>›</span><span>北方地区</span>
+</div>
+
+<div class="content">
+
+<h1>第2章 北方地区</h1>
+
+<!-- ===== 知识点 ===== -->
+<h2>一、范围与自然特征</h2>
+<ul style="padding-left:20px;margin-bottom:12px;">
+  <li><strong>范围：</strong>大致位于大兴安岭、青藏高原以东，内蒙古高原以南，秦岭—淮河以北，东临渤海和黄海。</li>
+  <li><strong>主要地形区：</strong>东北平原、华北平原、黄土高原。</li>
+  <li><strong>气候：</strong>温带季风气候，冬季寒冷干燥，夏季高温多雨。</li>
+  <li><strong>土壤：</strong>东北平原——<strong>黑土地</strong>（肥沃，有机质含量高）；华北平原和黄土高原——<strong>黄土地</strong>（黄土深厚，但水土流失严重）。</li>
+  <li>我国重要的旱作农业区，主要粮食作物为小麦和玉米。</li>
+</ul>
+
+<h2>二、东北三省</h2>
+<p>包括黑龙江省、吉林省、辽宁省。</p>
+<ul style="padding-left:20px;margin-bottom:12px;">
+  <li><strong>自然特征：</strong>冷湿——纬度高，冬季漫长寒冷；蒸发弱，气候湿润。</li>
+  <li><strong>农业：</strong>我国最大的商品粮基地，主要生产春小麦、玉米、大豆、水稻。黑土地十分肥沃。</li>
+  <li><strong>工业：</strong>我国最大的<strong>重工业基地</strong>（辽中南），依托丰富的煤、铁、石油资源。随着资源逐渐枯竭，目前面临产业结构单一等问题，正在实施<strong>振兴东北老工业基地</strong>战略。</li>
+</ul>
+
+<h2>三、黄土高原</h2>
+<ul style="padding-left:20px;margin-bottom:12px;">
+  <li>地理位置：大致位于太行山以西，乌鞘岭以东，秦岭以北，长城以南。</li>
+  <li><strong>文明的摇篮：</strong>黄土高原是华夏文明的发源地之一。</li>
+  <li><strong>水土流失原因：</strong></li>
+  <li>自然原因：黄土土质<strong>疏松</strong>、多孔隙；夏季降水集中且<strong>多暴雨</strong>；地表<strong>植被稀少</strong>。</li>
+  <li>人为原因：<strong>乱垦滥伐</strong>、过度放牧、开矿修路等破坏地表植被。</li>
+  <li><strong>治理措施：</strong></li>
+  <li>生物措施：<strong>植树造林、种草</strong></li>
+  <li>工程措施：<strong>修建梯田</strong>、打坝淤地，缓坡建梯田、陡坡退耕还林还草</li>
+  <li>合理安排生产活动</li>
+  <li>典型地形地貌：<strong>塬、梁、峁、川</strong>。</li>
+</ul>
+
+<h2>四、北京</h2>
+<ul style="padding-left:20px;margin-bottom:12px;">
+  <li><strong>位置：</strong>位于华北平原的西北角，北依燕山，西邻太行山。</li>
+  <li><strong>城市职能：</strong>
+    <br>①政治中心——全国人民代表大会、国务院等最高国家机构所在地；
+    <br>②文化中心——拥有故宫、颐和园、长城等世界文化遗产和多所全国知名高校；
+    <br>③国际交往中心——外国驻华使馆、国际组织代表机构多设在北京。
+  </li>
+  <li><strong>名胜古迹：</strong>故宫（紫禁城）、八达岭长城、颐和园、天坛、明十三陵、周口店北京猿人遗址等世界文化遗产。</li>
+  <li><strong>城市建设：</strong>旧城格局呈“凸”字形，中轴线对称分布；发展中面临交通拥堵、水资源短缺等问题。</li>
+</ul>
+
+
+<!-- 下载Word -->
+<div style="text-align:center;margin:24px 0 12px;">
+  <button class="btn btn-outline" onclick="downloadWord()" style="font-size:0.95rem;">
+    📥 下载Word文档（可打印背诵知识点）
+  </button>
+</div>
+<!-- 练习入口 -->
+<div style="text-align:center;margin:32px 0 16px;">
+  <button class="btn btn-primary" onclick="startQuiz()" style="font-size:1.1rem;padding:14px 48px;">
+    📝 开始练习（10题）
+  </button>
+</div>
+
+<div id="quiz-area" class="hidden"></div>
+
+</div><!-- /content -->
+
+<script src="../../assets/app.js"></script>
+<script src="../../assets/quiz.js"></script>
+<script>
+var GEO_G8X_CH02_QUIZ = [
+  {
+    id: "geo-g8x-ch02-q01",
+    question: "北方地区的主要气候类型是？",
+    options: ["亚热带季风气候", "温带季风气候", "温带大陆性气候", "高原山地气候"],
+    answer: 1,
+    explanation: "北方地区主要属于温带季风气候，冬季寒冷干燥，夏季高温多雨。"
+  },
+  {
+    id: "geo-g8x-ch02-q02",
+    question: "东北平原的典型土壤是？",
+    options: ["红土地", "黄土地", "黑土地", "紫土地"],
+    answer: 2,
+    explanation: "东北平原有肥沃的黑土地，有机质含量高，是我国重要的商品粮基地。"
+  },
+  {
+    id: "geo-g8x-ch02-q03",
+    question: "东北三省成为我国最大商品粮基地的主要有利条件是？",
+    options: ["热量充足", "黑土肥沃、地广人稀", "降水充沛", "科技发达"],
+    answer: 1,
+    explanation: "东北三省黑土肥沃，地广人稀，粮食商品率高，是我国最大的商品粮基地。"
+  },
+  {
+    id: "geo-g8x-ch02-q04",
+    question: "黄土高原水土流失严重的自然原因不包括？",
+    options: ["黄土土质疏松", "夏季多暴雨", "乱垦滥伐", "植被稀少"],
+    answer: 2,
+    explanation: "乱垦滥伐属于人为原因。自然原因包括黄土土质疏松、多暴雨、植被稀少。"
+  },
+  {
+    id: "geo-g8x-ch02-q05",
+    question: "治理黄土高原水土流失的生物措施是？",
+    options: ["修建梯田", "打坝淤地", "植树造林、种草", "修建水库"],
+    answer: 2,
+    explanation: "植树造林、种草是生物措施；修建梯田、打坝淤地是工程措施。"
+  },
+  {
+    id: "geo-g8x-ch02-q06",
+    question: "北京的城市职能不包括？",
+    options: ["政治中心", "经济特区", "文化中心", "国际交往中心"],
+    answer: 1,
+    explanation: "北京是中国的政治中心、文化中心、国际交往中心。经济特区是深圳、珠海、汕头、厦门等城市的定位。"
+  },
+  {
+    id: "geo-g8x-ch02-q07",
+    question: "黄土高原地区特有的黄土地貌不包括？",
+    options: ["塬", "梁", "峁", "峰"],
+    answer: 3,
+    explanation: "黄土高原特有地貌为塬（平坦高地）、梁（长条状）、峁（馒头状）、川（谷地）。'峰'不是黄土地貌的专门术语。"
+  },
+  {
+    id: "geo-g8x-ch02-q08",
+    question: "下列哪个不属于北京的世界文化遗产？",
+    options: ["故宫", "长城", "西湖", "颐和园"],
+    answer: 2,
+    explanation: "西湖位于浙江杭州。故宫、长城、颐和园、天坛等都是北京的世界文化遗产。"
+  },
+  {
+    id: "geo-g8x-ch02-q09",
+    question: "振兴东北老工业基地的背景是？",
+    options: ["资源储量不断增加", "产业结构单一、资源逐渐枯竭", "人口快速增长", "气候变暖"],
+    answer: 1,
+    explanation: "东北传统重工业基地面临资源逐渐枯竭、产业结构单一的问题，需要转型升级，实施振兴战略。"
+  },
+  {
+    id: "geo-g8x-ch02-q10",
+    question: "华北平原和黄土高原的土壤统一称为？",
+    options: ["黑土地", "红土地", "黄土地", "紫土地"],
+    answer: 2,
+    explanation: "华北平原和黄土高原覆盖着深厚的黄土，统一称为黄土地。东北平原为黑土地，南方为红土地。"
+  }
+];
+
+function startQuiz() {
+  var quizArea = document.getElementById('quiz-area');
+  quizArea.classList.remove('hidden');
+  quizArea.scrollIntoView({ behavior: 'smooth' });
+  QuizEngine.init({
+    data: GEO_G8X_CH02_QUIZ,
+    subject: 'geography',
+    chapterId: 'g8x/ch02',
+    chapterName: '第2章 北方地区',
+    containerId: 'quiz-area'
+  });
+}
+
+function downloadWord() {
+  var content = document.querySelector(".content").cloneNode(true);
+  var remove = content.querySelectorAll("#quiz-area, button, .btn");
+  remove.forEach(function(el) { el.remove(); });
+  var h = '<html><head><meta charset="UTF-8"><style>body{font-family:Microsoft YaHei,sans-serif;font-size:11pt;line-height:1.5;color:#000;margin:0;padding:0;}h1{font-size:15pt;text-align:center;margin:0 0 8px 0;}h2{font-size:13pt;margin:10px 0 4px 0;}h3{font-size:11.5pt;margin:6px 0 2px 0;}p{margin:0 0 4px 0;}table{border-collapse:collapse;width:100%;margin:4px 0;font-size:10pt;}td,th{border:1px solid #000;padding:2px 4px;}ul{margin:2px 0;padding-left:18px;}ul li{margin-bottom:1px;font-size:10.5pt;}strong{color:#000;}</style></head><body>' + content.innerHTML + '</body></html>';
+  var blob = new Blob(["﻿" + h], {type: "application/msword"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "地理八下-第2章-北方地区.doc";
+  a.click();
+}
+</script>
+
+</body>
+</html>
