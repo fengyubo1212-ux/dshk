@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟考试 - 地生会考学习平台</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" data-nav="home">🏠 首页</a>
+  <a href="../errors/index.html" data-nav="errors">📝 错题本</a>
+  <a href="index.html" data-nav="exams" class="active">📋 考试</a>
+</nav>
+
+<div class="breadcrumb">
+  <a href="../index.html">首页</a><span>›</span><span>模拟考试</span>
+</div>
+
+<div class="content" id="app">
+  <div id="exam-home">
+    <h1>📋 模拟考试</h1>
+    <p style="color:var(--color-text-light);margin-bottom:20px;">选择学科开始模拟考试，限时45分钟，共25道选择题。</p>
+    <div class="subject-cards">
+      <div class="subject-card geo" onclick="startExam('geography')">
+        <span class="icon">🌍</span>
+        <span class="label">地理模拟考</span>
+        <span style="font-size:0.8rem;color:var(--color-text-light);">25题 · 45分钟</span>
+      </div>
+      <div class="subject-card bio" onclick="startExam('biology')">
+        <span class="icon">🧬</span>
+        <span class="label">生物模拟考</span>
+        <span style="font-size:0.8rem;color:var(--color-text-light);">25题 · 45分钟</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="exam-area" class="hidden">
+    <div class="exam-header">
+      <span id="exam-title" style="font-weight:600;"></span>
+      <span class="exam-timer" id="exam-timer">45:00</span>
+    </div>
+    <div id="exam-content"></div>
+    <div id="exam-results" class="hidden"></div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+// ===== 地理题库 (25题，覆盖各章节) =====
+var GEO_QUESTIONS = [
+  {id:"exam-geo-01",question:"地球的平均半径约为多少千米？",options:["5371 km","6371 km","7371 km","4371 km"],answer:1,explanation:"地球平均半径约6371千米。",chapterName:"地理七上·地球与地图"},
+  {id:"exam-geo-02",question:"东西半球的分界线是？",options:["0°和180°","20°W和160°E","20°E和160°W","赤道"],answer:1,explanation:"东西半球以20°W和160°E为界。",chapterName:"地理七上·地球与地图"},
+  {id:"exam-geo-03",question:"世界上面积最大的大洲是？",options:["非洲","北美洲","亚洲","欧洲"],answer:2,explanation:"亚洲面积约4400万km²，是世界第一大洲。",chapterName:"地理七上·陆地和海洋"},
+  {id:"exam-geo-04",question:"地中海气候的特征是？",options:["全年高温多雨","夏季炎热干燥冬季温和多雨","全年温和多雨","夏季高温多雨冬季寒冷干燥"],answer:1,explanation:"地中海气候：夏季炎热干燥，冬季温和多雨。",chapterName:"地理七上·天气与气候"},
+  {id:"exam-geo-05",question:"世界人口自然增长率最高的大洲是？",options:["亚洲","欧洲","非洲","南美洲"],answer:2,explanation:"非洲人口自然增长率最高，欧洲最低。",chapterName:"地理七上·居民与聚落"},
+  {id:"exam-geo-06",question:"亚洲的地形特征是？",options:["西高东低","中高周低","南高北低","四周高中间低"],answer:1,explanation:"亚洲地势中部高、四周低，青藏高原和帕米尔高原地势最高。",chapterName:"地理七下·亚洲"},
+  {id:"exam-geo-07",question:"日本多火山地震的原因是？",options:["位于大陆内部","位于板块交界处","岛屿面积小","气候多变"],answer:1,explanation:"日本位于太平洋板块与亚欧板块交界处，地壳活跃。",chapterName:"地理七下·邻近地区"},
+  {id:"exam-geo-08",question:"中东地区最丰富的资源是？",options:["水资源","森林资源","石油资源","煤炭资源"],answer:2,explanation:"中东是目前世界上石油储量最大、生产和输出石油最多的地区。",chapterName:"地理七下·东半球"},
+  {id:"exam-geo-09",question:"美国的农业特点是？",options:["以小农经营为主","地区专业化生产","以畜牧业为主","粮食不能自给"],answer:1,explanation:"美国农业实现了地区专业化生产，形成了玉米带、小麦区、棉花带等。",chapterName:"地理七下·西半球"},
+  {id:"exam-geo-10",question:"南极地区的气候特征是？",options:["温暖湿润","酷寒、干燥、烈风","四季如春","炎热干燥"],answer:1,explanation:"南极地区以酷寒、干燥、烈风著称，是地球上最冷的地方。",chapterName:"地理七下·极地地区"},
+  {id:"exam-geo-11",question:"我国陆地面积约为？",options:["960万km²","860万km²","1060万km²","760万km²"],answer:0,explanation:"我国陆地面积约960万平方千米，居世界第三位。",chapterName:"地理八上·从世界看中国"},
+  {id:"exam-geo-12",question:"我国地势的特征是？",options:["东高西低","西高东低呈三级阶梯","南高北低","中间高四周低"],answer:1,explanation:"我国地势西高东低，大致呈三级阶梯分布。",chapterName:"地理八上·自然环境"},
+  {id:"exam-geo-13",question:"我国的南水北调工程主要解决？",options:["南方缺水","北方缺水","西部缺水","东部缺水"],answer:1,explanation:"南水北调将长江流域的水调到华北和西北，解决北方水资源不足。",chapterName:"地理八上·自然资源"},
+  {id:"exam-geo-14",question:"我国最大的综合性工业基地是？",options:["辽中南","京津唐","沪宁杭","珠江三角洲"],answer:2,explanation:"沪宁杭工业基地是我国规模最大、结构最完整、技术水平和效益最高的综合性工业基地。",chapterName:"地理八上·经济发展"},
+  {id:"exam-geo-15",question:"秦岭-淮河一线大致与哪条等温线一致？",options:["1月0°C等温线","7月20°C等温线","1月10°C等温线","7月30°C等温线"],answer:0,explanation:"秦岭-淮河一线大致与1月0°C等温线和800mm年等降水量线一致。",chapterName:"地理八下·地理差异"},
+  {id:"exam-geo-16",question:"黄土高原面临的主要生态问题是？",options:["土地荒漠化","水土流失","土壤盐碱化","水资源短缺"],answer:1,explanation:"黄土高原土质疏松，夏季多暴雨，植被破坏严重，水土流失是主要问题。",chapterName:"地理八下·北方地区"},
+  {id:"exam-geo-17",question:"长江三角洲的核心城市是？",options:["南京","杭州","上海","苏州"],answer:2,explanation:"上海是长江三角洲城市群的核心城市，是我国最大的城市和最重要的综合性工业城市。",chapterName:"地理八下·南方地区"},
+  {id:"exam-geo-18",question:"西北地区自东向西的自然景观变化是？",options:["荒漠→草原→森林","草原→荒漠草原→荒漠","森林→草原→荒漠","荒漠→森林→草原"],answer:1,explanation:"西北地区距海越来越远，降水减少，自东向西：草原→荒漠草原→荒漠。",chapterName:"地理八下·西北地区"},
+  {id:"exam-geo-19",question:"被称为中华水塔的是？",options:["长江三峡","三江源","黄果树","九寨沟"],answer:1,explanation:"三江源位于青藏高原，是长江、黄河和澜沧江的源头，被称为中华水塔。",chapterName:"地理八下·青藏地区"},
+  {id:"exam-geo-20",question:"地球公转产生的现象是？",options:["昼夜交替","四季变化","潮汐","日食"],answer:1,explanation:"地球公转产生四季变化、昼夜长短变化和五带划分。",chapterName:"地理七上·地球与地图"},
+  {id:"exam-geo-21",question:"世界上使用范围最广的语言是？",options:["汉语","英语","法语","西班牙语"],answer:1,explanation:"英语是世界上使用范围最广的语言。汉语使用人数最多。",chapterName:"地理七上·居民与聚落"},
+  {id:"exam-geo-22",question:"印度的主要气候类型是？",options:["热带雨林","热带季风","热带沙漠","亚热带季风"],answer:1,explanation:"印度以热带季风气候为主，全年高温，分明显的旱季和雨季。",chapterName:"地理七下·邻近地区"},
+  {id:"exam-geo-23",question:"我国最大的淡水湖是？",options:["洞庭湖","青海湖","鄱阳湖","太湖"],answer:2,explanation:"鄱阳湖是我国最大的淡水湖。青海湖是我国最大的湖泊（咸水湖）。",chapterName:"地理八上·自然环境"},
+  {id:"exam-geo-24",question:"香港和澳门实行的制度是？",options:["社会主义","资本主义","一国两制","联邦制"],answer:2,explanation:"香港和澳门回归后实行一国两制，保持原有的资本主义制度和生活方式50年不变。",chapterName:"地理八下·南方地区"},
+  {id:"exam-geo-25",question:"地球自转的方向是？",options:["自西向东","自东向西","自南向北","自北向南"],answer:0,explanation:"地球自转方向是自西向东。从北极上空看呈逆时针。",chapterName:"地理七上·地球与地图"}
+];
+
+// ===== 生物题库 (25题，覆盖各章节) =====
+var BIO_QUESTIONS = [
+  {id:"exam-bio-01",question:"下列属于生物共同特征的是？",options:["都能运动","都由细胞构成","都能进行光合作用","都能生长和繁殖"],answer:3,explanation:"生物的共同特征包括：需要营养、能呼吸、能排出废物、能生长繁殖等。并不是所有生物都能运动（如植物）或都由细胞构成（病毒）。",chapterName:"生物七上·认识生物"},
+  {id:"exam-bio-02",question:"生态系统的组成中，绿色植物属于？",options:["生产者","消费者","分解者","非生物部分"],answer:0,explanation:"绿色植物通过光合作用制造有机物，是生态系统中的生产者。",chapterName:"生物七上·了解生物圈"},
+  {id:"exam-bio-03",question:"植物细胞特有的结构是？",options:["细胞膜","细胞壁","细胞核","线粒体"],answer:1,explanation:"细胞壁是植物细胞特有的结构，动物细胞没有。叶绿体和液泡也是植物细胞特有的。",chapterName:"生物七上·细胞"},
+  {id:"exam-bio-04",question:"人体结构层次从微观到宏观依次是？",options:["组织→细胞→器官→系统","细胞→组织→器官→系统","器官→组织→细胞","系统→器官→组织→细胞"],answer:1,explanation:"动物体的结构层次：细胞→组织→器官→系统→动物体。",chapterName:"生物七上·细胞构成生物体"},
+  {id:"exam-bio-05",question:"裸子植物和被子植物的主要区别是？",options:["有无根茎叶","种子有无果皮包被","能否进行光合作用","有无输导组织"],answer:1,explanation:"裸子植物的种子裸露，无果皮包被；被子植物的种子有果皮包被。",chapterName:"生物七上·绿色植物"},
+  {id:"exam-bio-06",question:"花的结构中，发育成果实的是？",options:["胚珠","子房","子房壁","受精卵"],answer:1,explanation:"受精后，子房发育成果实，子房壁发育成果皮，胚珠发育成种子。",chapterName:"生物七上·被子植物的一生"},
+  {id:"exam-bio-07",question:"光合作用的场所是？",options:["线粒体","叶绿体","细胞核","液泡"],answer:1,explanation:"光合作用的场所是叶绿体。线粒体是呼吸作用的主要场所。",chapterName:"生物七上·绿色植物与生物圈"},
+  {id:"exam-bio-08",question:"人的受精部位在？",options:["卵巢","子宫","输卵管","阴道"],answer:2,explanation:"精子与卵细胞在输卵管中结合形成受精卵，受精卵再移动到子宫着床发育。",chapterName:"生物七下·人的由来"},
+  {id:"exam-bio-09",question:"消化和吸收营养物质的主要器官是？",options:["口腔","胃","小肠","大肠"],answer:2,explanation:"小肠是消化和吸收的主要场所，长5-6米，内壁有皱襞和小肠绒毛，消化液种类最多。",chapterName:"生物七下·人体的营养"},
+  {id:"exam-bio-10",question:"吸气时膈肌的状态是？",options:["舒张","收缩","不变","先舒张后收缩"],answer:1,explanation:"吸气时膈肌和肋间肌收缩，胸腔扩大，肺内气压降低，外界气体进入肺。",chapterName:"生物七下·人体的呼吸"},
+  {id:"exam-bio-11",question:"体循环的起点是？",options:["右心房","右心室","左心房","左心室"],answer:3,explanation:"体循环：左心室→主动脉→各级动脉→全身毛细血管→各级静脉→上下腔静脉→右心房。",chapterName:"生物七下·体内物质运输"},
+  {id:"exam-bio-12",question:"尿液形成过程中，肾小球的过滤作用形成？",options:["尿液","原尿","血浆","血清"],answer:1,explanation:"肾小球过滤血液形成原尿；肾小管重吸收后形成尿液。",chapterName:"生物七下·废物排出"},
+  {id:"exam-bio-13",question:"形成视觉的部位是？",options:["视网膜","晶状体","视神经","大脑皮层视觉中枢"],answer:3,explanation:"视网膜是成像部位，视觉是在大脑皮层的视觉中枢形成的。",chapterName:"生物七下·生命活动调节"},
+  {id:"exam-bio-14",question:"酸雨的主要成因是？",options:["CO₂过多","SO₂和NOₓ排放","臭氧层破坏","粉尘过多"],answer:1,explanation:"酸雨主要由燃烧含硫煤和石油产生的SO₂和NOₓ引起。CO₂过多导致温室效应。",chapterName:"生物七下·人类活动影响"},
+  {id:"exam-bio-15",question:"鱼类的呼吸器官是？",options:["肺","皮肤","鳃","气管"],answer:2,explanation:"鱼类生活在水中，用鳃呼吸。两栖动物幼体用鳃，成体用肺和皮肤呼吸。",chapterName:"生物八上·动物类群"},
+  {id:"exam-bio-16",question:"屈肘时肱二头肌和肱三头肌的状态是？",options:["都收缩","都舒张","肱二头肌收缩、肱三头肌舒张","肱三头肌收缩、肱二头肌舒张"],answer:2,explanation:"屈肘时肱二头肌收缩，肱三头肌舒张。伸肘时相反。",chapterName:"生物八上·运动和行为"},
+  {id:"exam-bio-17",question:"细菌属于原核生物是因为？",options:["无细胞壁","无细胞膜","无成形的细胞核","无DNA"],answer:2,explanation:"细菌无成形的细胞核，只有DNA集中区域，属于原核生物。",chapterName:"生物八上·细菌和真菌"},
+  {id:"exam-bio-18",question:"病毒的生活方式是？",options:["独立生活","寄生在活细胞内","腐生生活","共生生活"],answer:1,explanation:"病毒不能独立生活，必须寄生在活细胞内，利用宿主细胞的物质和能量进行自我复制。",chapterName:"生物八上·病毒"},
+  {id:"exam-bio-19",question:"生物分类的最基本单位是？",options:["界","门","科","种"],answer:3,explanation:"种是生物分类的最基本单位。分类单位从大到小：界门纲目科属种。",chapterName:"生物八上·生物多样性"},
+  {id:"exam-bio-20",question:"完全变态发育的昆虫经历的顺序是？",options:["卵→若虫→成虫","卵→幼虫→蛹→成虫","卵→蛹→幼虫→成虫","幼虫→卵→蛹→成虫"],answer:1,explanation:"完全变态发育：卵→幼虫→蛹→成虫（如蚕、蝴蝶）。不完全变态：卵→若虫→成虫（如蝗虫）。",chapterName:"生物八下·生殖和发育"},
+  {id:"exam-bio-21",question:"男孩的性染色体组成是？",options:["XX","XY","YY","X"],answer:1,explanation:"男孩性染色体组成为XY，女孩为XX。生男生女取决于父亲的精子类型。",chapterName:"生物八下·遗传与变异"},
+  {id:"exam-bio-22",question:"自然选择学说的核心观点是？",options:["用进废退","适者生存","物种不变","定向变异"],answer:1,explanation:"达尔文自然选择学说：过度繁殖→生存斗争→遗传变异→适者生存。",chapterName:"生物八下·生命起源和进化"},
+  {id:"exam-bio-23",question:"传染病的预防措施中，戴口罩属于？",options:["控制传染源","切断传播途径","保护易感人群","消灭病原体"],answer:1,explanation:"戴口罩、勤洗手、消毒等属于切断传播途径。隔离患者属于控制传染源，接种疫苗属于保护易感人群。",chapterName:"生物八下·传染病和免疫"},
+  {id:"exam-bio-24",question:"OTC指的是？",options:["处方药","非处方药","抗生素","疫苗"],answer:1,explanation:"OTC（Over The Counter）是非处方药，不需要医生处方即可自行购买。Rx表示处方药。",chapterName:"生物八下·用药与急救"},
+  {id:"exam-bio-25",question:"健康的完整含义不包括？",options:["身体健康","心理健康","社会适应良好","学习成绩优秀"],answer:3,explanation:"健康是指身体上、心理上和社会适应方面的良好状态，不单单指没有疾病。",chapterName:"生物八下·健康生活"}
+];
+
+// ===== 考试引擎 =====
+var examTimer = null;
+var examSeconds = 2700; // 45分钟
+var examQuestions = [];
+var examAnswers = [];
+var examCurrentIndex = 0;
+var examSubject = '';
+var examActive = false;
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function startExam(subject) {
+  if (examActive) return;
+  examActive = true;
+  examSubject = subject;
+  examSeconds = 2700;
+  examCurrentIndex = 0;
+  examAnswers = [];
+
+  var pool = subject === 'geography' ? GEO_QUESTIONS : BIO_QUESTIONS;
+  examQuestions = shuffle(pool).slice(0, 20);
+
+  document.getElementById('exam-home').classList.add('hidden');
+  document.getElementById('exam-area').classList.remove('hidden');
+  document.getElementById('exam-results').classList.add('hidden');
+  document.getElementById('exam-title').textContent = (subject === 'geography' ? '🌍 地理模拟考' : '🧬 生物模拟考') + ' · 20题';
+
+  updateTimer();
+  examTimer = setInterval(function() {
+    examSeconds--;
+    updateTimer();
+    if (examSeconds <= 0) {
+      clearInterval(examTimer);
+      finishExam();
+    }
+  }, 1000);
+
+  renderExamQuestion();
+}
+
+function updateTimer() {
+  var m = Math.floor(examSeconds / 60);
+  var s = examSeconds % 60;
+  var el = document.getElementById('exam-timer');
+  el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  if (examSeconds < 300) el.classList.add('warning');
+  else el.classList.remove('warning');
+}
+
+function renderExamQuestion() {
+  if (examCurrentIndex >= examQuestions.length) {
+    clearInterval(examTimer);
+    finishExam();
+    return;
+  }
+
+  var q = examQuestions[examCurrentIndex];
+  var total = examQuestions.length;
+  var idx = examCurrentIndex;
+  var labels = ['A', 'B', 'C', 'D'];
+
+  var html = '';
+  html += '<div class="quiz-progress">';
+  html += '<span>第 ' + (idx + 1) + ' / ' + total + ' 题</span>';
+  html += '<div class="progress-bar"><div class="fill" style="width:' + Math.round((idx / total) * 100) + '%"></div></div>';
+  html += '<span>' + (q.chapterName || '') + '</span>';
+  html += '</div>';
+
+  html += '<div class="quiz-question">';
+  html += '<div class="q-num">第 ' + (idx + 1) + ' 题</div>';
+  html += '<div class="q-text">' + q.question + '</div>';
+  html += '<div class="quiz-options">';
+  q.options.forEach(function(opt, optIdx) {
+    html += '<div class="quiz-option" data-index="' + optIdx + '" onclick="selectExamAnswer(' + optIdx + ')">';
+    html += '<span class="opt-label">' + (labels[optIdx] || optIdx) + '</span>';
+    html += '<span>' + opt + '</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div class="quiz-feedback" id="exam-feedback"></div>';
+  html += '</div>';
+
+  html += '<div style="display:flex;justify-content:space-between;margin-top:12px;flex-wrap:wrap;gap:8px;">';
+  html += '<button class="btn btn-outline btn-sm" onclick="prevExamQuestion()"' + (idx === 0 ? ' style="visibility:hidden"' : '') + '>上一题</button>';
+  html += '<button class="btn btn-danger btn-sm" onclick="submitExam()">交卷</button>';
+  html += '<button class="btn btn-primary btn-sm" onclick="nextExamQuestion()">' + (idx === total - 1 ? '完成' : '下一题') + '</button>';
+  html += '</div>';
+
+  document.getElementById('exam-content').innerHTML = html;
+  document.getElementById('exam-content').scrollIntoView({ behavior: 'smooth' });
+}
+
+function selectExamAnswer(optIdx) {
+  if (examAnswers[examCurrentIndex] !== undefined) return;
+
+  var q = examQuestions[examCurrentIndex];
+  var isCorrect = (optIdx === q.answer);
+
+  examAnswers[examCurrentIndex] = { userAnswer: optIdx, correct: isCorrect };
+
+  var options = document.querySelectorAll('#exam-content .quiz-option');
+  options.forEach(function(opt) { opt.style.pointerEvents = 'none'; });
+
+  var selectedOpt = document.querySelector('#exam-content .quiz-option[data-index="' + optIdx + '"]');
+  var correctOpt = document.querySelector('#exam-content .quiz-option[data-index="' + q.answer + '"]');
+
+  if (isCorrect) {
+    selectedOpt.classList.add('correct');
+  } else {
+    selectedOpt.classList.add('wrong');
+    correctOpt.classList.add('show-correct');
+  }
+
+  var fb = document.getElementById('exam-feedback');
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = isCorrect ? '✓ 正确！' : '✗ 错误。正确答案是 ' + (['A','B','C','D'][q.answer]);
+
+  if (!isCorrect) {
+    addError({
+      id: q.id, subject: examSubject, chapterId: '', chapterName: q.chapterName || '',
+      question: q.question, options: q.options, correctAnswer: q.answer,
+      userAnswer: optIdx, explanation: q.explanation || '', date: new Date().toISOString().slice(0, 10)
+    });
+  }
+}
+
+function nextExamQuestion() {
+  if (examCurrentIndex < examQuestions.length - 1) {
+    examCurrentIndex++;
+    renderExamQuestion();
+  } else {
+    submitExam();
+  }
+}
+
+function prevExamQuestion() {
+  if (examCurrentIndex > 0) {
+    examCurrentIndex--;
+    renderExamQuestion();
+  }
+}
+
+function submitExam() {
+  if (confirm('确定交卷吗？未作答的题目将计为错误。')) {
+    clearInterval(examTimer);
+    finishExam();
+  }
+}
+
+function finishExam() {
+  examActive = false;
+  var correctCount = examAnswers.filter(function(a) { return a.correct; }).length;
+  var answeredCount = examAnswers.length;
+  var total = examQuestions.length;
+  var pct = Math.round((correctCount / total) * 100);
+  var emoji = pct >= 90 ? '🎉' : pct >= 70 ? '👍' : pct >= 50 ? '📚' : '💪';
+  var grade = pct >= 90 ? '优秀' : pct >= 75 ? '良好' : pct >= 60 ? '及格' : '加油';
+
+  var m = Math.floor((2700 - examSeconds) / 60);
+  var s = (2700 - examSeconds) % 60;
+
+  var html = '<div class="quiz-results">';
+  html += '<div style="font-size:3rem;">' + emoji + '</div>';
+  html += '<div class="score">' + correctCount + ' / ' + total + '</div>';
+  html += '<div class="score-label">正确率 ' + pct + '% · ' + grade + '</div>';
+  html += '<p style="color:var(--color-text-light);">用时 ' + m + '分' + s + '秒 · 已答' + answeredCount + '题</p>';
+
+  if (correctCount < total) {
+    html += '<p style="color:var(--color-text-light);margin-bottom:16px;">错题已自动加入错题本，可去错题本复习。</p>';
+  }
+
+  html += '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">';
+  html += '<button class="btn btn-outline" onclick="retryWrong()">重做错题</button>';
+  html += '<button class="btn btn-primary" onclick="restartExam()">重新考试</button>';
+  html += '<button class="btn btn-outline" onclick="goHome()">返回首页</button>';
+  html += '</div>';
+  html += '</div>';
+
+  document.getElementById('exam-content').innerHTML = '';
+  document.getElementById('exam-results').innerHTML = html;
+  document.getElementById('exam-results').classList.remove('hidden');
+  document.getElementById('exam-timer').textContent = '0:00';
+}
+
+function retryWrong() {
+  var wrongIndices = [];
+  examAnswers.forEach(function(a, i) { if (!a.correct) wrongIndices.push(i); });
+  if (wrongIndices.length === 0) { alert('没有错题，全部正确！'); return; }
+  examQuestions = wrongIndices.map(function(i) { return examQuestions[i]; });
+  examCurrentIndex = 0;
+  examAnswers = [];
+  examActive = true;
+  document.getElementById('exam-results').classList.add('hidden');
+  document.getElementById('exam-title').textContent += ' (错题重做)';
+  renderExamQuestion();
+}
+
+function restartExam() {
+  location.reload();
+}
+
+function goHome() {
+  location.href = '../index.html';
+}
+</script>
+
+</body>
+</html>
